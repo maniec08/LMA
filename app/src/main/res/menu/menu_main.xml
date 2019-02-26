@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_log_off"
+        android:orderInCategory="100"
+        android:title="@string/log_off"
+        android:icon="@drawable/log"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="100"
+        android:title="@string/action_refresh"
+        android:visible="false"
+        app:showAsAction="never" />
+</menu>

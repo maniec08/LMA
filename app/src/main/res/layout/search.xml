@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/label_height"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="@string/search_header"
+            android:textSize="17sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/label_height"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="@dimen/label_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/log_off"
+                android:gravity="center_vertical"
+                android:text="@string/loan_id"
+                android:textAlignment="center"
+                android:textSize="25sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/value_width"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/loan_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="@string/loan_id"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/label_height"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="@dimen/label_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/log_off"
+                android:gravity="center_vertical"
+                android:text="@string/from_date"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/value_width"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/from_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="@string/date_format"
+                    android:inputType="date" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/from_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/calendar"
+                android:gravity="bottom" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/label_height"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="@dimen/label_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/log_off"
+                android:gravity="center_vertical"
+                android:text="@string/to_date"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/value_width"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/to_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="@string/date_format"
+                    android:inputType="date" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/settlement_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/calendar"
+                android:gravity="bottom" />
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           android:enabled="false"
+            android:text="@string/search" />
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

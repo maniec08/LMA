@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/Loan_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/loan_id"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/value_width"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/date"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/date_format"
+                        android:inputType="date" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/calendar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/amount"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/value_width"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/amount_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/amount"
+                        android:inputType="numberDecimal" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/interest_percent"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/value_width"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/interest_percent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/interest_percent"
+                        android:inputType="numberDecimal" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/interest"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/interest"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/amount" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height1"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/customer_name"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/customer_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/customer_name"
+                        android:inputType="textAutoComplete|textPersonName" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/phone"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/phone"
+                    android:inputType="textAutoComplete|phone" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height1"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/settlement_date"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/value_width"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/settlement_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/date_format"
+                        android:inputType="date" />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:id="@+id/settlement_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:layout_gravity="center"
+                    android:background="@drawable/calendar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height1"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/settlement_amount"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/value_width"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/settlement_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/settlement_amount" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/difference"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/difference"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/difference" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/save"
+                android:text="@string/save"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

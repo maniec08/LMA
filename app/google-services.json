@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "92584674681",
+    "firebase_url": "https://mani-9de39.firebaseio.com",
+    "project_id": "mani-9de39",
+    "storage_bucket": "mani-9de39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92584674681:android:638f2e0526e03340",
+        "android_client_info": {
+          "package_name": "com.mani.lma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92584674681-gr6v1qadqjiqrcvo80bbgaq811p27iuo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mani.lma",
+            "certificate_hash": "ebf71dfdf3530022066944253902773d841886ab"
+          }
+        },
+        {
+          "client_id": "92584674681-h9580alpqv66n54kig9k4rvvnq345srk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGFlLmEiTwRQzDcse1kOhmkdhG8rSI220"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92584674681-h9580alpqv66n54kig9k4rvvnq345srk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
