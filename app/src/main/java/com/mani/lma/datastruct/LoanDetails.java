@@ -1,38 +1,63 @@
 package com.mani.lma.datastruct;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
+import java.util.Objects;
 
 @Entity
-public class LoanDetails {
+public class LoanDetails implements Parcelable {
 
+    @NonNull
     @PrimaryKey
-    private int loanId = 0;
+    private String loanId;
 
     private String date;
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
+    private Long amount;
 
     private int interest;
 
     private String settlementDate;
 
-    private String settlementAmount;
+    private Long settlementAmount;
 
-    private int custId = 0;
+    private String custId;
 
-    public LoanDetails(int loanId, String date, int interest, String settlementDate, String settlementAmount, int custId) {
+    @Ignore
+    public LoanDetails(@NonNull String loanId,String date){
         this.loanId = loanId;
         this.date = date;
+    }
+
+    public LoanDetails(@NonNull String loanId, String date,long amount, int interest, String settlementDate, Long settlementAmount, String custId) {
+        this.loanId = loanId;
+        this.date = date;
+        this.amount = amount;
         this.interest = interest;
         this.settlementDate = settlementDate;
         this.settlementAmount = settlementAmount;
         this.custId = custId;
     }
 
-    public int getLoanId() {
+    @NonNull
+    public String getLoanId() {
         return loanId;
 }
 
-    public void setLoanId(int loanId) {
+    public void setLoanId(@NonNull String loanId) {
         this.loanId = loanId;
     }
 
@@ -60,19 +85,74 @@ public class LoanDetails {
         this.settlementDate = settlementDate;
     }
 
-    public String getSettlementAmount() {
+    public Long getSettlementAmount() {
         return settlementAmount;
     }
 
-    public void setSettlementAmount(String settlementAmount) {
+    public void setSettlementAmount(Long settlementAmount) {
         this.settlementAmount = settlementAmount;
     }
 
-    public int getCustId() {
+    public String getCustId() {
         return custId;
     }
 
-    public void setCustId(int custId) {
+    public void setCustId(String custId) {
         this.custId = custId;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(loanId);
+        dest.writeString(date);
+        if (amount == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(amount);
+        }
+        dest.writeInt(interest);
+        dest.writeString(settlementDate);
+        if (settlementAmount == null ) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(settlementAmount);
+        }
+        dest.writeString(custId);
+    }
+    protected LoanDetails(Parcel in) {
+        loanId = Objects.requireNonNull(in.readString());
+        date = in.readString();
+        if (in.readByte() == 0) {
+            amount = 0L;
+        } else {
+            amount = in.readLong();
+        }
+        interest = in.readInt();
+        settlementDate = in.readString();
+        if (in.readByte() == 0) {
+            settlementAmount = 0L;
+        } else {
+            settlementAmount = in.readLong();
+        }
+        custId = in.readString();
+    }
+
+    public static final Creator<LoanDetails> CREATOR = new Creator<LoanDetails>() {
+        @Override
+        public LoanDetails createFromParcel(Parcel in) {
+            return new LoanDetails(in);
+        }
+
+        @Override
+        public LoanDetails[] newArray(int size) {
+            return new LoanDetails[size];
+        }
+    };
 }

@@ -22,14 +22,12 @@
                     android:layout_width="@dimen/label_width"
                     android:layout_height="match_parent">
 
-                    <EditText
-                        android:id="@+id/Loan_id"
+                    <TextView
+                        android:id="@+id/loan_id"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:ems="10"
-                        android:gravity="center"
-                        android:hint="@string/loan_id"
-                        android:inputType="number" />
+                        android:gravity="center" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -139,10 +137,9 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/label_height1"
+                android:layout_height="@dimen/label_height"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -168,7 +165,34 @@
                         android:inputType="textAutoComplete|textPersonName" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_height"
+                android:orientation="horizontal">
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="@dimen/label_width"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/log_off"
+                    android:gravity="center_vertical"
+                    android:text="@string/customer_email"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/customer_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/customer_email"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/label_height"
@@ -292,7 +316,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/save"
+                android:id="@+id/save_button"
                 android:text="@string/save"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

@@ -3,5 +3,5 @@
     <dimen name="label_width">125dp</dimen>
     <dimen name="value_width">170dp</dimen>
     <dimen name="label_height">50dp</dimen>
-    <dimen name="label_height1">65dp</dimen>
+    <dimen name="label_height1">50dp</dimen>
 </resources>

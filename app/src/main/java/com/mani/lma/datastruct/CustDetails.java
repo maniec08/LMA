@@ -1,12 +1,19 @@
 package com.mani.lma.datastruct;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
+import java.util.Objects;
 
 @Entity
-public class CustDetails {
+public class CustDetails implements Parcelable {
+    @NonNull
     @PrimaryKey
-    private int custid  = 0;
+    private String custid ="0" ;
 
     private String custName;
 
@@ -14,18 +21,25 @@ public class CustDetails {
 
     private String phoneNumber;
 
-    public CustDetails(int custid, String custName, String emailId, String phoneNumber) {
+    @Ignore
+    public CustDetails(){
+    }
+
+    public CustDetails(@NonNull String custid, String custName, String emailId, String phoneNumber) {
         this.custid = custid;
         this.custName = custName;
         this.emailId = emailId;
         this.phoneNumber = phoneNumber;
     }
 
-    public int getCustid() {
+
+
+    @NonNull
+    public String getCustid() {
         return custid;
     }
 
-    public void setCustid(int custid) {
+    public void setCustid(@NonNull String custid) {
         this.custid = custid;
     }
 
@@ -52,4 +66,35 @@ public class CustDetails {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(custid);
+        dest.writeString(custName);
+        dest.writeString(emailId);
+        dest.writeString(phoneNumber);
+    }
+    protected CustDetails(Parcel in) {
+        custid = Objects.requireNonNull(in.readString());
+        custName = in.readString();
+        emailId = in.readString();
+        phoneNumber = in.readString();
+    }
+
+    public static final Creator<CustDetails> CREATOR = new Creator<CustDetails>() {
+        @Override
+        public CustDetails createFromParcel(Parcel in) {
+            return new CustDetails(in);
+        }
+
+        @Override
+        public CustDetails[] newArray(int size) {
+            return new CustDetails[size];
+        }
+    };
 }

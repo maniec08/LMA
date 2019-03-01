@@ -15,13 +15,18 @@
     <string name="date_format">mm/dd/yyyy</string>
     <string name="interest_percent">Interest%</string>
     <string name="interest">Interest</string>
-    <string name="customer_name">Customer name</string>
+    <string name="customer_name">Name</string>
     <string name="phone">Phone</string>
     <string name="difference">Difference</string>
-    <string name="settlement_amount">Settlement Amount</string>
-    <string name="settlement_date">Settlement Date</string>
+    <string name="settlement_amount">Paid Amount</string>
+    <string name="settlement_date">Paid Date</string>
     <string name="save">SAVE</string>
     <string name="from_date">From date</string>
     <string name="to_date">To date</string>
     <string name="search_header">Please enter any one of the below parameters</string>
+    <string name="customer_email">Email</string>
+    <string name="error_message">Error Retrieving data</string>
+    <string name="loan_creation_error_message">Error creating new loan id</string>
+    <string name="go_back">GO BACK</string>
+    <string name="dismiss">DISMISS</string>
 </resources>

@@ -9,7 +9,7 @@ import com.mani.lma.db.AppDb;
 public class CustViewModel extends ViewModel {
     private LiveData<CustDetails> custDetails;
 
-    public CustViewModel(AppDb appDb, int id) {
+    public CustViewModel(AppDb appDb, String id) {
         custDetails = appDb.appDao().getCustDetails(id);
     }
 

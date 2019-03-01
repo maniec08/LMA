@@ -33,7 +33,7 @@ public class DefaultViewModel extends AndroidViewModel {
 
     public DefaultViewModel(@NonNull Application application) {
         super(application);
-        loanDetails = AppDb.getLoanInstance(this.getApplication()).appDao().getLoanDetails(0);
-        custDetails = AppDb.getCustInstance(this.getApplication()).appDao().getCustDetails(0);
+        loanDetails = AppDb.getLoanInstance(this.getApplication()).appDao().getLoanDetails("0");
+        custDetails = AppDb.getCustInstance(this.getApplication()).appDao().getCustDetails("0");
     }
 }

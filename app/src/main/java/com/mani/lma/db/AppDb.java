@@ -24,6 +24,7 @@ public abstract class AppDb extends RoomDatabase {
                         context.getApplicationContext(),
                         AppDb.class,
                         custDbName)
+                        .allowMainThreadQueries()
                         .build();
             }
         }
@@ -37,6 +38,7 @@ public abstract class AppDb extends RoomDatabase {
                         context.getApplicationContext(),
                         AppDb.class,
                         loanDbName)
+                        .allowMainThreadQueries()
                         .build();
             }
         }

@@ -9,7 +9,7 @@ import com.mani.lma.db.AppDb;
 public class LoanViewModel extends ViewModel {
     private LiveData<LoanDetails> loanDetails;
 
-    public LoanViewModel(AppDb appDb, int id) {
+    public LoanViewModel(AppDb appDb, String id) {
         loanDetails = appDb.appDao().getLoanDetails(id);
     }
 

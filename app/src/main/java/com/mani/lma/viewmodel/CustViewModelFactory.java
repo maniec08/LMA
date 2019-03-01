@@ -7,9 +7,9 @@ import com.mani.lma.db.AppDb;
 
 public class CustViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         private final AppDb appDb;
-        private final int id;
+        private final String id;
 
-        public CustViewModelFactory(AppDb appDb, int id) {
+        public CustViewModelFactory(AppDb appDb, String  id) {
             this.appDb = appDb;
             this.id = id;
         }

@@ -3,6 +3,7 @@ package com.mani.lma.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mani.lma.R;
+import com.mani.lma.utils.FireBaseHelper;
+import com.mani.lma.utils.KeyConstants;
 import com.mani.lma.utils.SessionVariables;
 
 import java.util.Arrays;
@@ -68,14 +71,14 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                String email = firebaseUser.getEmail();
+                final String email = firebaseUser.getEmail();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference().child("user");
-                Query query = myRef.orderByChild("email").equalTo(email);
+                final DatabaseReference myRef = database.getReference().child(KeyConstants.USER_REF);
+                Query query = myRef.orderByChild(KeyConstants.EMAIL_REF).equalTo(email);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
 
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot issue : dataSnapshot.getChildren()) {
                                 String lender = ((HashMap) issue.getValue()).get("type").toString();
@@ -95,6 +98,9 @@ public class LoginActivity extends AppCompatActivity {
                           //  }
 
 
+                        } else {
+                           myRef.push().updateChildren(FireBaseHelper
+                                   .getCustMap("",email,"", KeyConstants.BORROWER));
                         }
                     }
 
