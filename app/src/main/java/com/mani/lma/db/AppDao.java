@@ -33,9 +33,15 @@ public interface AppDao {
     @Query("UPDATE CustDetails SET  custName=:name, phoneNumber =:phoneNumber,emailId=:emailId WHERE custid =:id")
     void updateCustDb(String id, String name, String phoneNumber, String emailId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE )
     void insertLoan(LoanDetails loanDetails);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertLoan(List<LoanDetails> loanDetails);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCustomerInfo(CustDetails custDetails);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertCustomerInfo(List<CustDetails> custDetails);
 }

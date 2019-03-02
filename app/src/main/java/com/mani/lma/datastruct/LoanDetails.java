@@ -42,7 +42,7 @@ public class LoanDetails implements Parcelable {
         this.date = date;
     }
 
-    public LoanDetails(@NonNull String loanId, String date,long amount, int interest, String settlementDate, Long settlementAmount, String custId) {
+    public LoanDetails(@NonNull String loanId, String date,long amount, int interest, String settlementDate, long settlementAmount, String custId) {
         this.loanId = loanId;
         this.date = date;
         this.amount = amount;

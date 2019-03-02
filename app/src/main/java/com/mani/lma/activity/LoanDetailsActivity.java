@@ -5,12 +5,15 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.util.LocaleData;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +23,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,9 +43,12 @@ import com.mani.lma.viewmodel.CustViewModelFactory;
 import com.mani.lma.viewmodel.LoanViewModel;
 import com.mani.lma.viewmodel.LoanViewModelFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,6 +86,8 @@ public class LoanDetailsActivity extends AppCompatActivity {
     private LoanDetails loanDetails;
     private CustDetails custDetails = new CustDetails();
 
+    private String loanId;
+    private String custId;
 
     private boolean isNewLoan;
 
@@ -103,8 +110,10 @@ public class LoanDetailsActivity extends AppCompatActivity {
         custDb = AppDb.getCustInstance(this);
 
         Intent intent = getIntent();
-        loanDetails = intent.getParcelableExtra(KeyConstants.loanDeatils);
-        custDetails = intent.getParcelableExtra(KeyConstants.custDetails);
+        //  loanDetails = intent.getParcelableExtra(KeyConstants.loanDeatils);
+        //  custDetails = intent.getParcelableExtra(KeyConstants.custDetails);
+        loanId = intent.getStringExtra(KeyConstants.loanId);
+        custId = intent.getStringExtra(KeyConstants.custId);
 
         isNewLoan = intent.getBooleanExtra(KeyConstants.newLoan, false);
 
@@ -122,18 +131,14 @@ public class LoanDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
 
     }
-private void deleteNodeOnBack(){
-    String loanId = loanDetails.getLoanId();
-    if(!isNullOrEmpty(loanId) && isNewLoan){
-        FirebaseDatabase.getInstance().getReference(KeyConstants.LOAN_REF).child(loanId).setValue(null);;
-    }
-}
-    private void populateLoanUi(LoanDetails loanDetails) {
-        this.loanDetails = loanDetails;
-        populateLoanUi();
+
+    private void deleteNodeOnBack() {
+        if (isNewLoan && !isNullOrEmpty(loanId)) {
+            //FirebaseDatabase.getInstance().getReference(KeyConstants.LOAN_REF).child(loanId).setValue(null);
+        }
     }
 
-    private void populateLoanUi() {
+    private void populateLoanUi(LoanDetails loanDetails) {
         if (loanDetails != null) {
             loanIdTextView.setText(loanDetails.getLoanId());
             if (!isNewLoan) {
@@ -143,15 +148,90 @@ private void deleteNodeOnBack(){
                 setTextOnView(paidDateEditText, loanDetails.getSettlementDate());
                 setTextOnView(paidAmountEditText, loanDetails.getSettlementAmount().toString());
             }
+            populateInterestAndDifference();
         }
     }
 
-    private void populateCustomerUi(CustDetails custDetails) {
-        this.custDetails = custDetails;
-        populateCustomerUi();
+    private void populateInterestAndDifference() {
+        String loanDate = loanDateEditText.getText().toString();
+        if (isNullOrEmpty(loanDate)) {
+            interestAmountTextView.setText(getString(R.string.enter_loan_date));
+            amountDifferenceTextView.setText(getString(R.string.enter_loan_date));
+            return;
+        }
+        Long amount = getLongFromView(amountView);
+        if (amount == 0L) {
+            interestAmountTextView.setText(getString(R.string.enter_amount));
+            amountDifferenceTextView.setText(getString(R.string.enter_amount));
+            return;
+        }
+        int interest = getIntFromView(interestPercentEditText);
+        if (interest == 0) {
+            interestAmountTextView.setText(getString(R.string.enter_interest));
+            amountDifferenceTextView.setText(getString(R.string.enter_interest));
+            return;
+        }
+        String interestAmount = getInterestAmount(loanDate, amount, interest);
+        interestAmountTextView.setText(interestAmount);
+        String paidDate = paidDateEditText.getText().toString();
+        if (isNullOrEmpty(paidDate)) {
+            amountDifferenceTextView.setText(getString(R.string.enter_paid_date));
+        }
+        Long paidAmount = getLongFromView(paidAmountEditText);
+        if (paidAmount == 0L) {
+            amountDifferenceTextView.setText(getString(R.string.enter_paid_amount));
+            return;
+        }
+        Long diffAmount = getDifferenceAmount(amount, paidAmount,interestAmount );
+        amountDifferenceTextView.setText(Long.toString(diffAmount));
+        if(diffAmount>0L){
+            amountDifferenceTextView.setTextColor(getColor(R.color.green));
+        } else if (diffAmount<0L){
+            amountDifferenceTextView.setTextColor(getColor(R.color.red));
+        } else {
+            amountDifferenceTextView.setTextColor(getColor(R.color.black));
+        }
     }
 
-    private void populateCustomerUi() {
+    private Long getDifferenceAmount(Long amount, Long paidAmount, String interestAmount) {
+        try {
+            return paidAmount - (amount + Integer.parseInt(interestAmount));
+        }catch (Exception e){
+            Log.d(TAG, "Error calculating difference");
+        }
+        return 0L;
+    }
+
+    private String getInterestAmount(String loanDateString, Long amount, int interest) {
+        try {
+            Date loanDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(loanDateString);
+            Date calcUntilDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(ViewHelper.getToday());
+            int totalMonths = noOfMonths(loanDate, calcUntilDate);
+            return Long.toString(amount * interest  * totalMonths/100L);
+
+        } catch (Exception e) {
+            Log.d(TAG, "Error calculating interest");
+        }
+        return "";
+    }
+
+    private int noOfMonths(Date loanDate, Date paidDate) {
+        Calendar cal = Calendar.getInstance();
+        if (loanDate.before(paidDate)) {
+            cal.setTime(loanDate);
+        } else {
+            cal.setTime(paidDate);
+            paidDate = loanDate;
+        }
+        int c = 0;
+        while (cal.getTime().before(paidDate)) {
+            cal.add(Calendar.MONTH, 1);
+            c++;
+        }
+        return c;
+    }
+
+    private void populateCustomerUi(CustDetails custDetails) {
         if (custDetails != null && !isNewLoan) {
             setTextOnView(customerEmailEditText, custDetails.getEmailId());
             setTextOnView(customerNameEditText, custDetails.getCustName());
@@ -160,7 +240,9 @@ private void deleteNodeOnBack(){
     }
 
     private void setTextOnView(TextView view, String str) {
-        if (!isNullOrEmpty(str)) {
+        if (isNullOrEmpty(str)) {
+            view.setText("");
+        } else {
             view.setText(str);
         }
     }
@@ -178,12 +260,17 @@ private void deleteNodeOnBack(){
     }
 
     private void collectUiInfo() {
-        loanDetails.setLoanId(loanIdTextView.getText().toString());
-        loanDetails.setDate(loanDateEditText.getText().toString());
-        loanDetails.setAmount(getLongFromView(amountView));
-        loanDetails.setInterest(getIntFromView(interestPercentEditText));
-        loanDetails.setSettlementDate(paidDateEditText.getText().toString());
-        loanDetails.setSettlementAmount(getLongFromView(paidAmountEditText));
+
+        //Cust id is updated in updateFirebase method
+        loanDetails = new LoanDetails(
+                loanIdTextView.getText().toString(),
+                loanDateEditText.getText().toString(),
+                getLongFromView(amountView),
+                getIntFromView(interestPercentEditText),
+                paidDateEditText.getText().toString(),
+                getLongFromView(paidAmountEditText),
+                ""
+        );
         if (custDetails == null) {
             custDetails = new CustDetails();
         }
@@ -218,10 +305,34 @@ private void deleteNodeOnBack(){
 
     private void setUpListeners() {
         saveButton.setOnClickListener(saveButtonListener());
+        amountView.addTextChangedListener(getTextWatcher());
+        interestPercentEditText.addTextChangedListener(getTextWatcher());
+        loanDateEditText.addTextChangedListener(getTextWatcher());
+        paidDateEditText.addTextChangedListener(getTextWatcher());
+        paidAmountEditText.addTextChangedListener(getTextWatcher());
         ViewHelper.displayDatePicker(loanDateEditText, context);
         ViewHelper.displayDatePicker(loanDateCalendar, loanDateEditText, context);
         ViewHelper.displayDatePicker(paidDateEditText, context);
         ViewHelper.displayDatePicker(paidDateCalendar, paidDateEditText, context);
+    }
+
+    private TextWatcher getTextWatcher(){
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                populateInterestAndDifference();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
     }
 
     private View.OnClickListener saveButtonListener() {
@@ -229,8 +340,7 @@ private void deleteNodeOnBack(){
             @Override
             public void onClick(View v) {
                 collectUiInfo();
-                //order matters, as updateCustomerInfo generates customer id
-                updateCustomerInfo();
+                updateFirebase();
                 finish();
             }
         };
@@ -247,7 +357,7 @@ private void deleteNodeOnBack(){
 
     }
 
-    private void updateCustomerInfo() {
+    private void updateFirebase() {
         final DatabaseReference myRef = FirebaseDatabase.getInstance()
                 .getReference().child(KeyConstants.USER_REF);
         final Query query = myRef.orderByChild(KeyConstants.EMAIL_REF).equalTo(custDetails.getEmailId());
@@ -319,7 +429,8 @@ private void deleteNodeOnBack(){
     }
 
     private void validateIntentContent() {
-        if (loanDetails == null || loanDetails.getLoanId() == null || loanDetails.getLoanId().isEmpty()) {
+        // if (loanDetails == null || loanDetails.getLoanId() == null || loanDetails.getLoanId().isEmpty()) {
+        if (isNullOrEmpty(loanId)) {
             showErrorDialog();
         }
     }
@@ -365,10 +476,10 @@ private void deleteNodeOnBack(){
     }
 
     public void updateLoanUiFromDb() {
-        if (loanDetails == null || isNullOrEmpty(loanDetails.getLoanId())) {
+        if (isNullOrEmpty(loanId)) {
             return;
         }
-        LoanViewModelFactory factory = new LoanViewModelFactory(loanDb, loanDetails.getLoanId());
+        LoanViewModelFactory factory = new LoanViewModelFactory(loanDb, loanId);
         final LoanViewModel viewModel = ViewModelProviders.of(this, factory)
                 .get(LoanViewModel.class);
         viewModel.getLoanDetails().observe(this, new Observer<LoanDetails>() {
@@ -380,10 +491,10 @@ private void deleteNodeOnBack(){
     }
 
     public void updateCustUiFromDb() {
-        if (custDetails == null || isNullOrEmpty(custDetails.getCustid())) {
+        if (isNullOrEmpty(custId)) {
             return;
         }
-        CustViewModelFactory factory = new CustViewModelFactory(custDb, custDetails.getCustid());
+        CustViewModelFactory factory = new CustViewModelFactory(custDb, custId);
         final CustViewModel viewModel = ViewModelProviders.of(this, factory)
                 .get(CustViewModel.class);
         viewModel.getCustDetails().observe(this, new Observer<CustDetails>() {

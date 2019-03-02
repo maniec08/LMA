@@ -31,6 +31,7 @@ import com.mani.lma.db.AppDbExecutors;
 import com.mani.lma.utils.KeyConstants;
 import com.mani.lma.utils.ViewHelper;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import butterknife.BindView;
@@ -73,6 +74,7 @@ public class MainMenuActivity extends AppCompatActivity {
      * (First two character as letter and next 3 as digits)
      */
     private void createNewIdAndLaunchDetails() {
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(KeyConstants.LOAN_REF);
         Query lastQuery = databaseReference.orderByKey().limitToLast(1);
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,7 +92,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     pushNewKey(newLoanId);
                     pushNewKeyToDb(loanDetails);
                     Intent intent = new Intent(context, LoanDetailsActivity.class);
-                    intent.putExtra(KeyConstants.loanDeatils, loanDetails);
+                    intent.putExtra(KeyConstants.loanId, newLoanId);
                     intent.putExtra(KeyConstants.newLoan, true);
                     context.startActivity(intent);
                 }
@@ -116,8 +118,9 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void pushNewKey(String id) {
+        Date date = new Date();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(KeyConstants.LOAN_REF);
-        databaseReference.child(newLoanId).setValue("Newloan");
+        databaseReference.child(id).setValue(date);
     }
 
     private void pushNewKeyToDb(final LoanDetails loanDetails) {

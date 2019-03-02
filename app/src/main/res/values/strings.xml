@@ -6,6 +6,7 @@
     <string name="password">Password</string>
     <string name="loan_details">Loan Details</string>
     <string name="search">Search</string>
+    <string name="date_range">Date Range</string>
     <string name="main_menu">Main Menu</string>
     <string name="log_off">LOG OFF</string>
     <string name="loan_list">Loan List</string>
@@ -23,10 +24,16 @@
     <string name="save">SAVE</string>
     <string name="from_date">From date</string>
     <string name="to_date">To date</string>
-    <string name="search_header">Please enter any one of the below parameters</string>
+    <string name="search_header">Please choose your search parameter</string>
     <string name="customer_email">Email</string>
     <string name="error_message">Error Retrieving data</string>
     <string name="loan_creation_error_message">Error creating new loan id</string>
     <string name="go_back">GO BACK</string>
     <string name="dismiss">DISMISS</string>
+    <string name="enter_loan_date">Enter Loan Date</string>
+    <string name="enter_paid_date">Enter Paid Date</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="enter_interest">Enter Interest</string>
+    <string name="enter_paid_amount">Enter Paid Amount</string>
+    <string name="error_loan_not_found">Loan details not found for the search</string>
 </resources>

@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="log_off">#E4FAE5</color>
+    <color name="green">#B92DCA34</color>
+    <color name="red">#EE2924</color>
+    <color name="black">#B9111111</color>
 </resources>
