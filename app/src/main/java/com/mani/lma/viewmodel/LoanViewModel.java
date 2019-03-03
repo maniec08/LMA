@@ -17,7 +17,7 @@ public class LoanViewModel extends ViewModel {
         return loanDetails;
     }
 
-    public void setMovieDetails(LiveData<LoanDetails> loanDetails) {
+    public void setLoanDetails(LiveData<LoanDetails> loanDetails) {
         this.loanDetails = loanDetails;
     }
 }

@@ -133,8 +133,8 @@ public class LoanDetailsActivity extends AppCompatActivity {
     }
 
     private void deleteNodeOnBack() {
-        if (isNewLoan && !isNullOrEmpty(loanId)) {
-            //FirebaseDatabase.getInstance().getReference(KeyConstants.LOAN_REF).child(loanId).setValue(null);
+        if (isNewLoan) {
+            FirebaseDatabase.getInstance().getReference(KeyConstants.LOAN_REF).child(loanId).setValue(null);
         }
     }
 
@@ -182,11 +182,11 @@ public class LoanDetailsActivity extends AppCompatActivity {
             amountDifferenceTextView.setText(getString(R.string.enter_paid_amount));
             return;
         }
-        Long diffAmount = getDifferenceAmount(amount, paidAmount,interestAmount );
+        Long diffAmount = getDifferenceAmount(amount, paidAmount, interestAmount);
         amountDifferenceTextView.setText(Long.toString(diffAmount));
-        if(diffAmount>0L){
+        if (diffAmount > 0L) {
             amountDifferenceTextView.setTextColor(getColor(R.color.green));
-        } else if (diffAmount<0L){
+        } else if (diffAmount < 0L) {
             amountDifferenceTextView.setTextColor(getColor(R.color.red));
         } else {
             amountDifferenceTextView.setTextColor(getColor(R.color.black));
@@ -196,7 +196,7 @@ public class LoanDetailsActivity extends AppCompatActivity {
     private Long getDifferenceAmount(Long amount, Long paidAmount, String interestAmount) {
         try {
             return paidAmount - (amount + Integer.parseInt(interestAmount));
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, "Error calculating difference");
         }
         return 0L;
@@ -207,7 +207,7 @@ public class LoanDetailsActivity extends AppCompatActivity {
             Date loanDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(loanDateString);
             Date calcUntilDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(ViewHelper.getToday());
             int totalMonths = noOfMonths(loanDate, calcUntilDate);
-            return Long.toString(amount * interest  * totalMonths/100L);
+            return Long.toString(amount * interest * totalMonths / 100L);
 
         } catch (Exception e) {
             Log.d(TAG, "Error calculating interest");
@@ -240,9 +240,7 @@ public class LoanDetailsActivity extends AppCompatActivity {
     }
 
     private void setTextOnView(TextView view, String str) {
-        if (isNullOrEmpty(str)) {
-            view.setText("");
-        } else {
+        if (!isNullOrEmpty(str)) {
             view.setText(str);
         }
     }
@@ -316,7 +314,7 @@ public class LoanDetailsActivity extends AppCompatActivity {
         ViewHelper.displayDatePicker(paidDateCalendar, paidDateEditText, context);
     }
 
-    private TextWatcher getTextWatcher(){
+    private TextWatcher getTextWatcher() {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -326,6 +324,7 @@ public class LoanDetailsActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 populateInterestAndDifference();
+
             }
 
             @Override
@@ -341,7 +340,7 @@ public class LoanDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 collectUiInfo();
                 updateFirebase();
-                finish();
+                onBackPressed();
             }
         };
     }
@@ -435,6 +434,33 @@ public class LoanDetailsActivity extends AppCompatActivity {
         }
     }
 
+    public void showAlertDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(context).setMessage(R.string.error_message)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        collectUiInfo();
+                        updateFirebase();
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.dont_save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                }).setNeutralButton(R.string.dismiss, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
     public void showErrorDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context).setMessage(R.string.error_message)
                 .setPositiveButton(R.string.go_back, new DialogInterface.OnClickListener() {
@@ -442,6 +468,7 @@ public class LoanDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+
                         finish();
 
                     }
@@ -486,6 +513,7 @@ public class LoanDetailsActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable LoanDetails loanDetails) {
                 populateLoanUi(loanDetails);
+
             }
         });
     }

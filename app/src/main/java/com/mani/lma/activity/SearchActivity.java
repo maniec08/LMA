@@ -28,11 +28,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.mani.lma.R;
 import com.mani.lma.datastruct.CustDetails;
 import com.mani.lma.datastruct.LoanDetails;
+import com.mani.lma.datastruct.QueryDetails;
 import com.mani.lma.db.AppDb;
 import com.mani.lma.db.AppDbExecutors;
 import com.mani.lma.utils.KeyConstants;
 import com.mani.lma.utils.ViewHelper;
 
+import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,6 +77,8 @@ public class SearchActivity extends AppCompatActivity {
     List<String> custIds = new ArrayList<>();
     List<LoanDetails> loanDetailsList = new ArrayList<>();
     List<CustDetails> custDetailsList = new ArrayList<>();
+
+    QueryDetails queryDetails;
     private Context context;
 
     @Override
@@ -127,7 +131,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!loanIdRadio.isChecked() && !dateRangeRadio.isChecked()) {
-                    showToastMessage("Invalid Selection");
+                    ViewHelper.showToastMessage(context,"Invalid Selection");
                     return;
                 }
                 if (loanIdRadio.isChecked()) {
@@ -139,40 +143,13 @@ public class SearchActivity extends AppCompatActivity {
         };
     }
 
-    private boolean isDateInRange(String date) {
-        if (isNullOrEmpty(date)) {
-            return false;
-        }
-        String fromDateStr = fromDate.getText().toString();
-        String toDateStr = toDate.getText().toString();
-        if (isNullOrEmpty(toDateStr)) {
-            toDateStr = fromDateStr;
-        }
-        if (isNullOrEmpty(fromDateStr)) {
-            fromDateStr = toDateStr;
-        }
-        try {
-            Date fromDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(fromDateStr);
-            Date toDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(toDateStr);
-            Date searchDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(date);
-            if (searchDate.equals(fromDate) || searchDate.equals(toDate)) {
-                return true;
-            }
-            if (searchDate.after(fromDate) && toDate.equals(searchDate)) {
-                return true;
-            }
-        } catch (Exception e) {
 
-        }
-        return false;
-
-    }
 
     private void searchByDateRange() {
         String fromDateStr = fromDate.getText().toString();
         String toDateStr = toDate.getText().toString();
         if (isNullOrEmpty(fromDateStr) && isNullOrEmpty(toDateStr)) {
-            showToastMessage("Enter Atleast One date");
+            ViewHelper.showToastMessage(context,"Enter Atleast One date");
             return;
         }
         if (isNullOrEmpty(toDateStr)) {
@@ -181,49 +158,35 @@ public class SearchActivity extends AppCompatActivity {
         if (isNullOrEmpty(fromDateStr)) {
             fromDate.setText(toDate.getText().toString());
         }
-
-        DatabaseReference loanRef = FirebaseDatabase.getInstance().getReference(KeyConstants.LOAN_REF);
-        loanRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshots) {
-                if (dataSnapshots.exists()) {
-                    initialize();
-                    for (DataSnapshot dataSnapshot : dataSnapshots.getChildren()) {
-                        HashMap map = (HashMap) dataSnapshot.getValue();
-                        String loanDate = getStringValue(map, KeyConstants.DATE_REF);
-                        if (isDateInRange(loanDate)) {
-                            addLoanDetailsFromSnapShot(map, dataSnapshot.getKey());
-                        }
-                    }
-                } else {
-                    showToastMessage(getString(R.string.error_loan_not_found));
-                }
-                updateLoanDb();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        queryDetails = new QueryDetails(fromDateStr,toDateStr,false);
+        startListActivity();
     }
 
     private void launchActivity() {
         if (loanIds.size() == 1) {
             Intent intent = new Intent(this, LoanDetailsActivity.class);
             intent.putExtra(KeyConstants.loanId, loanIds.get(0));
+            intent.putExtra(KeyConstants.custId, loanDetailsList.get(0).getCustId());
             startActivity(intent);
         } else if (loanIds.size() > 1) {
             Intent intent = new Intent(this, LoanListActivity.class);
-            intent.putStringArrayListExtra(KeyConstants.loanId, (ArrayList<String>) loanIds);
+            intent.putExtra(KeyConstants.queryDetails, queryDetails);
+            intent.putParcelableArrayListExtra(KeyConstants.loanDeatils, (ArrayList<LoanDetails>) loanDetailsList);
             startActivity(intent);
         }
+    }
+
+    private void startListActivity(){
+        Intent intent = new Intent(this, LoanListActivity.class);
+        intent.putExtra(KeyConstants.queryDetails, queryDetails);
+        intent.putParcelableArrayListExtra(KeyConstants.loanDeatils, (ArrayList<LoanDetails>) loanDetailsList);
+        startActivity(intent);
     }
 
     private void searchByLoanID() {
         String loanID = loanId.getText().toString();
         if (isNullOrEmpty(loanID)) {
-            showToastMessage("Enter Loan Id");
+            ViewHelper.showToastMessage(context,"Enter Loan Id");
             return;
         }
         searchByLoanID(loanID);
@@ -257,14 +220,15 @@ public class SearchActivity extends AppCompatActivity {
             try {
                 HashMap map = (HashMap) dataSnapshots.getValue();
                 addLoanDetailsFromSnapShot(map, dataSnapshots.getKey());
-            }catch (Exception e){
-                showToastMessage(getString(R.string.error_loan_not_found));
+            } catch (Exception e) {
+                ViewHelper.showToastMessage(this,getString(R.string.error_loan_not_found));
             }
 
         } else {
-            showToastMessage(getString(R.string.error_loan_not_found));
+            ViewHelper.showToastMessage(this, getString(R.string.error_loan_not_found));
         }
         updateLoanDb();
+        launchActivity();
     }
 
     private void addLoanDetailsFromSnapShot(HashMap loanMap, String loanId) {
@@ -334,7 +298,6 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void run() {
                 AppDb.getLoanInstance(context).appDao().insertLoan(loanDetailsList);
-                launchActivity();
             }
         });
     }
@@ -366,7 +329,7 @@ public class SearchActivity extends AppCompatActivity {
             return 0;
         }
         try {
-            return (Integer) map.get(key);
+            return ((Long) map.get(key)).intValue();
         } catch (Exception e) {
             return 0;
         }
@@ -376,9 +339,7 @@ public class SearchActivity extends AppCompatActivity {
         return loanID == null || loanID.isEmpty();
     }
 
-    private void showToastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
+
 
     private CompoundButton.OnCheckedChangeListener getCheckChangeListenerLoanID() {
         return new CompoundButton.OnCheckedChangeListener() {

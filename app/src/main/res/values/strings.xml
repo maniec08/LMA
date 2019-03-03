@@ -27,9 +27,11 @@
     <string name="search_header">Please choose your search parameter</string>
     <string name="customer_email">Email</string>
     <string name="error_message">Error Retrieving data</string>
+    <string name="alert_message">Alert!!\n Entered info will be lost on Exit. Hit \"Save\" button to save info and \"Don\'t Save\" to exit without saving the info</string>
     <string name="loan_creation_error_message">Error creating new loan id</string>
     <string name="go_back">GO BACK</string>
     <string name="dismiss">DISMISS</string>
+    <string name="dont_save">Don\'t Save</string>
     <string name="enter_loan_date">Enter Loan Date</string>
     <string name="enter_paid_date">Enter Paid Date</string>
     <string name="enter_amount">Enter Amount</string>

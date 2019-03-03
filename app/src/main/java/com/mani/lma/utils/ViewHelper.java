@@ -8,6 +8,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,5 +77,9 @@ public class ViewHelper {
         final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("EST"));
         return sdf.format(cal.getTime());
+    }
+
+    public static void showToastMessage(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }

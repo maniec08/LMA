@@ -2,11 +2,13 @@ package com.mani.lma.utils;
 
 public class KeyConstants {
     public static String loanId = "loan_id";
-    public static String custId = "loan_id";
+    public static String custId = "cust_id";
     public static String loanDeatils = "loan_details";
     public static String custDetails = "cust_details";
+    public static String queryDetails = "query_details";
     public static String newLoan = "new_loan";
     public static String newId = "NEW";
+    public static final String USE_DB = "use_db";
     public static final String LOAN_REF = "loan";
     public static final String USER_REF = "user";
     public static final String EMAIL_REF = "email";
