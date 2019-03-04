@@ -306,8 +306,9 @@ public class LoanDetailsActivity extends AppCompatActivity {
         amountView.addTextChangedListener(getTextWatcher());
         interestPercentEditText.addTextChangedListener(getTextWatcher());
         loanDateEditText.addTextChangedListener(getTextWatcher());
-        paidDateEditText.addTextChangedListener(getTextWatcher());
+        paidDateEditText.addTextChangedListener(getTextWatcherForDate());
         paidAmountEditText.addTextChangedListener(getTextWatcher());
+        customerEmailEditText.addTextChangedListener(getTextWatcherForEmail());
         ViewHelper.displayDatePicker(loanDateEditText, context);
         ViewHelper.displayDatePicker(loanDateCalendar, loanDateEditText, context);
         ViewHelper.displayDatePicker(paidDateEditText, context);
@@ -323,6 +324,51 @@ public class LoanDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                populateInterestAndDifference();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+    }
+
+    private TextWatcher getTextWatcherForEmail() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                paidDateCalendar.setEnabled(s.length() > 0);
+                paidDateEditText.setEnabled(s.length() > 0);
+
+                populateInterestAndDifference();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+    }
+
+    private TextWatcher getTextWatcherForDate() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                paidAmountEditText.setEnabled(s.length() > 0);
                 populateInterestAndDifference();
 
             }
@@ -491,6 +537,10 @@ public class LoanDetailsActivity extends AppCompatActivity {
             case android.R.id.home:
                 deleteNodeOnBack();
                 finish();
+                return true;
+            case R.id.action_log_off:
+                finishAffinity();
+                ViewHelper.logOff(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -73,6 +74,9 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.to_calendar)
     ImageView toDateCalender;
 
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
     List<String> loanIds = new ArrayList<>();
     List<String> custIds = new ArrayList<>();
     List<LoanDetails> loanDetailsList = new ArrayList<>();
@@ -87,11 +91,16 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.search);
         context = this;
         ButterKnife.bind(this);
+        progressBar.setVisibility(View.GONE);
         setUpActionBar();
         setUpUiBasedOnToggle();
         setUpListeners();
     }
-
+    @Override
+    protected void onResume() {
+        progressBar.setVisibility(View.GONE);
+        super.onResume();
+    }
     private void setUpListeners() {
         loanIdRadio.setOnCheckedChangeListener(getCheckChangeListenerLoanID());
         dateRangeRadio.setOnCheckedChangeListener(getCheckChangeListenerDate());
@@ -130,6 +139,7 @@ public class SearchActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 if (!loanIdRadio.isChecked() && !dateRangeRadio.isChecked()) {
                     ViewHelper.showToastMessage(context,"Invalid Selection");
                     return;
@@ -149,6 +159,7 @@ public class SearchActivity extends AppCompatActivity {
         String fromDateStr = fromDate.getText().toString();
         String toDateStr = toDate.getText().toString();
         if (isNullOrEmpty(fromDateStr) && isNullOrEmpty(toDateStr)) {
+            progressBar.setVisibility(View.GONE);
             ViewHelper.showToastMessage(context,"Enter Atleast One date");
             return;
         }
@@ -186,6 +197,7 @@ public class SearchActivity extends AppCompatActivity {
     private void searchByLoanID() {
         String loanID = loanId.getText().toString();
         if (isNullOrEmpty(loanID)) {
+            progressBar.setVisibility(View.GONE);
             ViewHelper.showToastMessage(context,"Enter Loan Id");
             return;
         }
@@ -228,6 +240,7 @@ public class SearchActivity extends AppCompatActivity {
             ViewHelper.showToastMessage(this, getString(R.string.error_loan_not_found));
         }
         updateLoanDb();
+        progressBar.setVisibility(View.GONE);
         launchActivity();
     }
 
@@ -393,6 +406,10 @@ public class SearchActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_log_off:
+                finishAffinity();
+                ViewHelper.logOff(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);

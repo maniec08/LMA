@@ -23,6 +23,15 @@ public interface AppDao {
     @Query("SELECT * FROM loanDetails WHERE custId = :id")
     LiveData<List<LoanDetails>> getLoanDetailsWithCustId(String id);
 
+    @Query("SELECT * FROM loanDetails WHERE custId = :id")
+    List<LoanDetails> getLoanDetailsWidget(String id);
+
+    @Query("SELECT settlementAmount FROM loanDetails WHERE settlementDate = :date")
+    List<Long> getLoanDetailsWithPaidDate(String date);
+
+    @Query("SELECT amount FROM loanDetails WHERE date = :date")
+    List<Long> getLoanDetailsWithLoanDate(String date);
+
     @Query("SELECT * FROM loanDetails WHERE loanId = :id")
     LoanDetails getLoanDetail(String id);
 

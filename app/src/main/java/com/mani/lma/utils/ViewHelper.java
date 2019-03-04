@@ -3,12 +3,17 @@ package com.mani.lma.utils;
 import android.app.DatePickerDialog;
 import android.content.Context;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.mani.lma.activity.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,9 +52,9 @@ public class ViewHelper {
     }
     public static void displayDatePicker(final ImageView imageView, final EditText editText , final Context context ) {
         final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-        final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("EST"));
+        final Calendar cal = Calendar.getInstance();
 
-        editText.setText(sdf.format(System.currentTimeMillis()));
+       // editText.setText(sdf.format(System.currentTimeMillis()));
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -81,5 +86,15 @@ public class ViewHelper {
 
     public static void showToastMessage(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void logOff(Context context) {
+        FirebaseAuth.getInstance().signOut();
+
+        Intent intent = new Intent(context, LoginActivity.class);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 }

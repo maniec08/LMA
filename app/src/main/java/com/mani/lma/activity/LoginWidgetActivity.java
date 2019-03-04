@@ -10,13 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -48,8 +44,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = LoginActivity.class.getSimpleName();
+public class LoginWidgetActivity extends AppCompatActivity {
+    private static final String TAG = LoginWidgetActivity.class.getSimpleName();
 
     FirebaseUser firebaseUser = null;
     Context applicationContext = null;
@@ -59,16 +55,12 @@ public class LoginActivity extends AppCompatActivity {
     List<String> custIds = new ArrayList<>();
     List<CustDetails> custDetailsList = new ArrayList<>();
     Intent resultIntent = new Intent();
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         applicationContext = this;
-        progressBar.setVisibility(View.GONE);
+
         FirebaseApp.initializeApp(this);
         setUpUi();
 
@@ -76,9 +68,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+       // super.onBackPressed();
     }
-
 
     private void setUpUi() {
         setUpActionBar();
@@ -91,12 +82,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-
-        super.onResume();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
@@ -104,9 +89,6 @@ public class LoginActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
 
-
-                progressBar.setVisibility(View.VISIBLE);
-                // Successfully signed in
                 firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 final String email = firebaseUser.getEmail();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -117,69 +99,44 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-
                             for (DataSnapshot issue : dataSnapshot.getChildren()) {
                                 try {
-
                                     HashMap map = ((HashMap) issue.getValue());
-                                    CustDetails custDetails = new CustDetails(issue.getKey(),
+                                    String custId = issue.getKey();
+                                    CustDetails custDetails = new CustDetails(custId,
                                             getStringValue(map, KeyConstants.NAME_REF),
                                             getStringValue(map, KeyConstants.EMAIL_REF),
                                             getStringValue(map, KeyConstants.PHONE_REF));
                                     updateCustDb(custDetails);
                                     String lender = getStringValue(map, KeyConstants.TYPE_REF);
-                                    if (lender.equalsIgnoreCase(KeyConstants.LENDER)) {
-                                        updateSharedPref(custDetails.getCustid(), true);
-                                        SessionVariables.isLender = true;
-                                        SessionVariables.user = firebaseUser;
-                                        progressBar.setVisibility(View.GONE);
-                                        Intent intent = new Intent(applicationContext, MainMenuActivity.class);
-                                        startActivity(intent);
 
+                                    if (lender.equalsIgnoreCase(KeyConstants.LENDER)) {
+                                        updateSharedPref(custId, true);
                                     } else {
-                                        updateSharedPref(custDetails.getCustid(), false);
-                                        updateSharedPref();
-                                        SessionVariables.isLender = false;
-                                        QueryDetails queryDetails = new QueryDetails(custDetails.getCustid(), true);
-                                        if (!useDb()) {
-                                            pullLoanDetailsForCustomer(queryDetails.getUserId());
-                                        }
-                                        progressBar.setVisibility(View.GONE);
-                                        Intent intent = new Intent(applicationContext, LoanListActivity.class);
-                                        intent.putExtra(KeyConstants.queryDetails, queryDetails);
-                                        startActivity(intent);
+                                        updateSharedPref(custId, false);
+                                        pullLoanDetailsForCustomer(custId);
                                     }
                                 } catch (Exception e) {
                                     Log.d(TAG, e.getMessage());
                                 }
-
                             }
-                            // if (dataSnapshot.child("type").getValue().toString().equalsIgnoreCase("lender")) {
-
-                            // } else {
-
-                            //  }
-
-
                         } else {
                             myRef.push().updateChildren(FireBaseHelper
                                     .getCustMap("", email, "", KeyConstants.BORROWER));
                         }
+                        finish();
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        String abc = "";
+
                     }
                 });
                 // ...
             } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
             }
         }
+
 
     }
 
@@ -214,23 +171,11 @@ public class LoginActivity extends AppCompatActivity {
         custDetailsList = new ArrayList<>();
     }
 
-    private boolean useDb() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        return sharedPrefs.getBoolean(KeyConstants.USE_DB, false);
-    }
-
     private void updateSharedPref(String custId, boolean isLender) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(KeyConstants.custId, custId);
         editor.putBoolean(custId, isLender);
-        editor.apply();
-    }
-
-    private void updateSharedPref() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(KeyConstants.USE_DB, true);
         editor.apply();
     }
 
@@ -242,6 +187,7 @@ public class LoginActivity extends AppCompatActivity {
                     initialize();
                     for (DataSnapshot dataSnapshot : dataSnapshots.getChildren()) {
                         try {
+
                             HashMap map = (HashMap) dataSnapshot.getValue();
                             addLoanDetailsFromSnapShot(map, dataSnapshot.getKey());
 
@@ -322,13 +268,4 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

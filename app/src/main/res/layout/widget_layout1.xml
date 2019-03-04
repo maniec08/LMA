@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:text="@string/date_format"
+        android:id="@+id/today_date_widget"/>
+
+    <TextView
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:text="@string/lended_amount_widget"
+        android:id="@+id/lended_amount_widget"/>
+
+    <TextView
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:text="@string/settlement_amount_widget"
+        android:id="@+id/settlement_amount_widget"/>
+
+    <TextView
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:text="@string/net_amount_widget"
+        android:id="@+id/net_amount_widget"/>
+
+</RelativeLayout>

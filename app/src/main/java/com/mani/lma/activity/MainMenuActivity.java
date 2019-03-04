@@ -69,6 +69,11 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+       moveTaskToBack(true);
+    }
+
     /**
      * New loan id is System generated alphanumeric and the format is AA123
      * (First two character as letter and next 3 as digits)
@@ -188,7 +193,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+           // actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.main_menu);
 
         }
@@ -197,8 +202,9 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
+            case R.id.action_log_off:
+                finishAffinity();
+                ViewHelper.logOff(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);

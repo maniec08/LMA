@@ -10,6 +10,7 @@
         android:id="@+id/action_refresh"
         android:orderInCategory="100"
         android:title="@string/action_refresh"
+        android:icon="@drawable/baseline_update_24"
         android:visible="false"
         app:showAsAction="never" />
 </menu>

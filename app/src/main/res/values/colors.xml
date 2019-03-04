@@ -7,4 +7,5 @@
     <color name="green">#B92DCA34</color>
     <color name="red">#EE2924</color>
     <color name="black">#B9111111</color>
+    <color name="card_background">#DEF8D8</color>
 </resources>

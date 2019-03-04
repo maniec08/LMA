@@ -75,15 +75,23 @@ public class LoanListActivity extends AppCompatActivity {
         setUpUi();
     }
 
-    private void pullLoanDetailsForCustomer(String custId) {
-        DatabaseReference loanRef = FirebaseDatabase.getInstance().getReference(KeyConstants.LOAN_REF);
-        Query query = loanRef.orderByKey().equalTo(custId, KeyConstants.CUST_REF);
+    private void pullLoanDetailsForCustomer() {
+        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child(KeyConstants.LOAN_REF);
+        Query query = myRef.orderByChild(KeyConstants.CUST_REF).equalTo(queryDetails.getUserId());
         query.addValueEventListener(getValeEventListenerForUserId());
     }
 
+    @Override
+    public void onBackPressed() {
+        if (SessionVariables.isLender) {
+            super.onBackPressed();
+        } else {
+            moveTaskToBack(true);
+        }
+    }
 
     private void setUpUi() {
-       if (queryDetails.isUserIdSearch()) {
+        if (queryDetails.isUserIdSearch()) {
             setUpUiFromDB();
         } else {
             setUpUiFromFireBase();
@@ -349,7 +357,9 @@ public class LoanListActivity extends AppCompatActivity {
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            if (SessionVariables.isLender) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
             actionBar.setTitle(R.string.loan_list);
         }
     }
@@ -358,8 +368,20 @@ public class LoanListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if(SessionVariables.isLender) {
+                    finish();
+                } else {
+                    moveTaskToBack(true);
+                }
                 return true;
+            case R.id.action_refresh:
+                pullLoanDetailsForCustomer();
+                return true;
+            case R.id.action_log_off:
+                finishAffinity();
+                ViewHelper.logOff(this);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -367,9 +389,9 @@ public class LoanListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        if (!SessionVariables.isLender) {
-            findViewById(R.id.action_refresh).setVisibility(View.VISIBLE);
-        }
+        menu.findItem(R.id.action_refresh).setVisible(!SessionVariables.isLender);
+        //menu.findItem(android.R.id.home).setVisible(SessionVariables.isLender);
+
         return true;
     }
 }

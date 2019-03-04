@@ -21,6 +21,20 @@
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.LoanDetailsActivity" />
         <activity android:name=".activity.LoanListActivity" />
+        <activity android:name=".activity.LoginWidgetActivity" />
+        <activity android:name=".activity.WidgetMainActivity" />
+
+        <receiver android:name=".widget.WidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widgetproviderinfo" />
+        </receiver>
+        <service android:name=".widget.WidgetService" />
+        <service android:name=".widget.LoanListViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
+
 
 </manifest>

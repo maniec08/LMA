@@ -38,4 +38,7 @@
     <string name="enter_interest">Enter Interest</string>
     <string name="enter_paid_amount">Enter Paid Amount</string>
     <string name="error_loan_not_found">Loan details not found for the search</string>
+    <string name="net_amount_widget">Net amount : $ %d</string>
+    <string name="settlement_amount_widget">Paid amount : %d</string>
+    <string name="lended_amount_widget">Loan Amount : %d</string>
 </resources>
