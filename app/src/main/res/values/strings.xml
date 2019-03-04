@@ -41,4 +41,8 @@
     <string name="net_amount_widget">Net amount : $ %d</string>
     <string name="settlement_amount_widget">Paid amount : %d</string>
     <string name="lended_amount_widget">Loan Amount : %d</string>
+    <string name="sign_in_error">Sign in Error, please Try Again</string>
+    <string name="error_invalid_selection">Invalid Selection</string>
+    <string name="error_enter_date">Enter Atleast One date</string>
+    <string name="error_enter_loan_id">Enter Loan Id</string>
 </resources>

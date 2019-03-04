@@ -141,7 +141,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
                 if (!loanIdRadio.isChecked() && !dateRangeRadio.isChecked()) {
-                    ViewHelper.showToastMessage(context,"Invalid Selection");
+                    ViewHelper.showToastMessage(context,getString(R.string.error_invalid_selection));
                     return;
                 }
                 if (loanIdRadio.isChecked()) {
@@ -160,7 +160,7 @@ public class SearchActivity extends AppCompatActivity {
         String toDateStr = toDate.getText().toString();
         if (isNullOrEmpty(fromDateStr) && isNullOrEmpty(toDateStr)) {
             progressBar.setVisibility(View.GONE);
-            ViewHelper.showToastMessage(context,"Enter Atleast One date");
+            ViewHelper.showToastMessage(context,getString(R.string.error_enter_date));
             return;
         }
         if (isNullOrEmpty(toDateStr)) {
@@ -198,7 +198,7 @@ public class SearchActivity extends AppCompatActivity {
         String loanID = loanId.getText().toString();
         if (isNullOrEmpty(loanID)) {
             progressBar.setVisibility(View.GONE);
-            ViewHelper.showToastMessage(context,"Enter Loan Id");
+            ViewHelper.showToastMessage(context,getString(R.string.error_enter_loan_id));
             return;
         }
         searchByLoanID(loanID);

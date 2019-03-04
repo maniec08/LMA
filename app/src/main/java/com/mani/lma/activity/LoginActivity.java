@@ -174,10 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
                 // ...
             } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
+              ViewHelper.showToastMessage(applicationContext,getString(R.string.sign_in_error));
             }
         }
 
