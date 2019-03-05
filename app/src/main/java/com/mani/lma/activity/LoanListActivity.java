@@ -1,12 +1,11 @@
 package com.mani.lma.activity;
 
+
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -14,10 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.Window;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,6 +55,9 @@ public class LoanListActivity extends AppCompatActivity {
     @BindView(R.id.list_recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     private Context context;
     QueryDetails queryDetails;
 
@@ -68,7 +72,7 @@ public class LoanListActivity extends AppCompatActivity {
         setContentView(R.layout.loan_list);
         ButterKnife.bind(this);
         context = this;
-        setUpActionBar();
+        setUpToolBar();
         Intent intent = getIntent();
         queryDetails = intent.getParcelableExtra(KeyConstants.queryDetails);
         loanDetailsList = intent.getParcelableArrayListExtra(KeyConstants.loanDeatils);
@@ -346,6 +350,7 @@ public class LoanListActivity extends AppCompatActivity {
         if (loanDetailsList.size() <= 0) {
             handleEmptyList();
         } else {
+
             LoanListAdapter loanListAdapter =
                     new LoanListAdapter(this, loanDetailsList);
             LinearLayoutManager layoutManager = new GridLayoutManager(this, 2);
@@ -354,13 +359,18 @@ public class LoanListActivity extends AppCompatActivity {
         }
     }
 
-    private void setUpActionBar() {
+    private void setUpToolBar() {
+
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.loan_list);
+            toolbar.inflateMenu(R.menu.menu_main);
+        }
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             if (SessionVariables.isLender) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
-            actionBar.setTitle(R.string.loan_list);
         }
     }
 
@@ -368,7 +378,7 @@ public class LoanListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(SessionVariables.isLender) {
+                if (SessionVariables.isLender) {
                     finish();
                 } else {
                     moveTaskToBack(true);

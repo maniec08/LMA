@@ -109,6 +109,7 @@
                 android:id="@+id/from_calendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/from_date"
                 android:layout_gravity="center"
                 android:background="@drawable/calendar"
                 android:gravity="bottom" />
@@ -149,6 +150,7 @@
                 android:id="@+id/to_calendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/to_date_calendar"
                 android:layout_gravity="center"
                 android:background="@drawable/calendar"
                 android:gravity="bottom" />

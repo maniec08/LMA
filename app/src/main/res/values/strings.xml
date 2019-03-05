@@ -21,9 +21,12 @@
     <string name="difference">Difference</string>
     <string name="settlement_amount">Paid Amount</string>
     <string name="settlement_date">Paid Date</string>
+    <string name="select_settlement_date">Select Paid Date</string>
     <string name="save">SAVE</string>
     <string name="from_date">From date</string>
-    <string name="to_date">To date</string>
+    <string name="from_date_calendar">From date Calendar</string>
+    <string name="to_date">To date Calendar</string>
+    <string name="to_date_calendar">To date</string>
     <string name="search_header">Please choose your search parameter</string>
     <string name="customer_email">Email</string>
     <string name="error_message">Error Retrieving data</string>

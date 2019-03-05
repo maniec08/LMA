@@ -46,6 +46,7 @@
 
                 <ImageView
                     android:id="@+id/calendar"
+                    android:contentDescription="@string/enter_loan_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/calendar" />
@@ -253,6 +254,7 @@
                     android:id="@+id/settlement_calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/select_settlement_date"
                     android:gravity="bottom"
                     android:layout_gravity="center"
                     android:background="@drawable/calendar" />
@@ -282,7 +284,8 @@
                         android:layout_height="match_parent"
                         android:ems="10"
                         android:gravity="center"
-                        android:hint="@string/settlement_amount" />
+                        android:hint="@string/settlement_amount"
+                        android:inputType="numberDecimal" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 

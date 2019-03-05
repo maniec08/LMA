@@ -20,7 +20,8 @@
         <activity android:name=".activity.MainMenuActivity"/>
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.LoanDetailsActivity" />
-        <activity android:name=".activity.LoanListActivity" />
+        <activity android:name=".activity.LoanListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activity.LoginWidgetActivity" />
         <activity android:name=".activity.WidgetMainActivity" />
 
